@@ -4,7 +4,7 @@
     <input type="button" value="<?php echo $button_confirm; ?>" id="button-confirm" class="btn btn-primary" />
   </div>
 </div>
-<div id="ingenicopayment"></div>
+<div id="Worldlinepayment"></div>
 <form action="<?php echo $returnUrl_2; ?>" id="response-form" method="POST">
 <input type="hidden" name="msg" value="" id="response-string">
 </form>

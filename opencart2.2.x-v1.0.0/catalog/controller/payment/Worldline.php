@@ -1,19 +1,19 @@
 <?php
 
-class ControllerPaymentIngenico extends Controller {
+class ControllerPaymentWorldline extends Controller {
 	public function index() {
-	    $this->load->model('payment/ingenico');
+	    $this->load->model('payment/Worldline');
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
 		$data['continue'] = $this->url->link('checkout/success');		
 
-		$merchant_details = $this->model_payment_ingenico->get();
+		$merchant_details = $this->model_payment_Worldline->get();
 		//print_r($merchant_details); die;
 		$merchant_txn_id = rand(1,1000000);
 		$cur_date = date("d-m-Y");
-		$returnUrl = $this->url->link('payment/ingenico/getResponse');
+		$returnUrl = $this->url->link('payment/Worldline/getResponse');
 
-		$returnUrl_2 = $this->url->link('payment/ingenico/getResponse');
+		$returnUrl_2 = $this->url->link('payment/Worldline/getResponse');
 
         if($merchant_details[0]['primary_color_code']){
             $data['primary_color_code'] = $merchant_details[0]['primary_color_code'];
@@ -47,7 +47,7 @@ class ControllerPaymentIngenico extends Controller {
             $data['merchant_logo_url'] = 'https://www.paynimo.com/CompanyDocs/company-logo-md.png';
         }
         if($merchant_details[0]['embedPaymentGatewayOnPage'] == '1'){
-            $data['checkoutElement'] = '#ingenicopayment';
+            $data['checkoutElement'] = '#Worldlinepayment';
         } else {
             $data['checkoutElement'] = '';
         }
@@ -122,15 +122,15 @@ class ControllerPaymentIngenico extends Controller {
         $datastring = $data['mrctCode'] . "|" . $data['merchantTxnRefNumber'] . "|" . $data['Amount'] . "|" . "|" . $data['CustomerId'] . "|" . $data['customerMobNumber'] . "|" . $data['email'] . "||||||||||" . $data['SALT'];
         $hashed = hash('sha512', $datastring);
         $data['token'] = $hashed;
-        $log = new Log('Ingenico_' . date("Ymd") . '.log');
+        $log = new Log('Worldline_' . date("Ymd") . '.log');
         $log->write('Request: ' . $datastring);
         $this->load->model('checkout/order');
         $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], 1, $merchant_txn_id);
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/ingenico.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/payment/ingenico.tpl', $data);
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/Worldline.tpl')) {
+			return $this->load->view($this->config->get('config_template') . '/template/payment/Worldline.tpl', $data);
 		} else {
-			return $this->load->view('payment/ingenico.tpl', $data);
+			return $this->load->view('payment/Worldline.tpl', $data);
 		}
 	}
 
@@ -138,12 +138,12 @@ class ControllerPaymentIngenico extends Controller {
 	    if($_POST){
 
 	        $response = $_POST;
-	        $this->load->model('payment/ingenico');
-	        $merchant_details = $this->model_payment_ingenico->get();
+	        $this->load->model('payment/Worldline');
+	        $merchant_details = $this->model_payment_Worldline->get();
 	        $salt = $merchant_details[0]['key'];
 	        $str = $_POST['msg'];
 	        //print_r($str); die;
-	        $log = new Log('Ingenico_' . date("Ymd") . '.log');
+	        $log = new Log('Worldline_' . date("Ymd") . '.log');
             $log->write('Response: ' . $str);
             $responseData = explode('|', $str);
             $responseData_1 = explode('|', $str);
@@ -233,9 +233,9 @@ class ControllerPaymentIngenico extends Controller {
 	}
 
 	public function confirm() {
-        if ($this->session->data['payment_method']['code'] == 'ingenico') {
+        if ($this->session->data['payment_method']['code'] == 'Worldline') {
 			$this->load->model('checkout/order');
-			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('ingenico_order_status'));
+			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('Worldline_order_status'));
 		}
 	}
 
@@ -274,10 +274,10 @@ class ControllerPaymentIngenico extends Controller {
      
             $str = $_GET['msg'];
             if ($str) {
-            $this->load->model('payment/ingenico');
-	        $merchant_details = $this->model_payment_ingenico->get();
+            $this->load->model('payment/Worldline');
+	        $merchant_details = $this->model_payment_Worldline->get();
 	        $salt = $merchant_details[0]['key'];
-            $log = new Log('Ingenico_' . date("Ymd") . '.log');
+            $log = new Log('Worldline_' . date("Ymd") . '.log');
             $log->write('Response S2S: ' . $str);
             $responseData = explode('|', $str);
             $responseData_1 = explode('|', $str);

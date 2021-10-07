@@ -1,4 +1,4 @@
-<h3>Ingenico Refund</h3>
+<h3>Worldline Refund</h3>
  <?php if ($status == "success") { ?>
     <form id="form" class="form-horizontal">
      <input type="hidden" name="date" placeholder="dd-mm-YYYY" value="<?php echo $date; ?>" required/>

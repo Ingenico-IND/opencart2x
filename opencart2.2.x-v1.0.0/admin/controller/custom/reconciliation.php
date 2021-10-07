@@ -26,8 +26,8 @@ class ControllerCustomReconciliation extends Controller {
             'href'      => $this->url->link('custom/verification', 'token=' . $this->session->data['token'], 'SSL'),
             'separator' => ' :: '
         );
-        $this->load->model('payment/ingenico');
-        $merchant_details = $this->model_payment_ingenico->get();
+        $this->load->model('payment/Worldline');
+        $merchant_details = $this->model_payment_Worldline->get();
         $data['mrctCode'] = $merchant_details[0]['merchant_code'];
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
@@ -43,7 +43,7 @@ class ControllerCustomReconciliation extends Controller {
                     " . DB_PREFIX . "order o
                     LEFT JOIN " . DB_PREFIX . "order_history oh
                     ON o.order_id = oh.order_id
-                    WHERE o.order_status_id = '1' AND o.payment_code = 'ingenico' AND oh.order_status_id = '1' AND oh.comment !='' AND o.`date_added` BETWEEN '" . $data['fromdate'] .' 00:00:00'. "' AND '" . $data['todate'] .' 23:59:59'. "'
+                    WHERE o.order_status_id = '1' AND o.payment_code = 'Worldline' AND oh.order_status_id = '1' AND oh.comment !='' AND o.`date_added` BETWEEN '" . $data['fromdate'] .' 00:00:00'. "' AND '" . $data['todate'] .' 23:59:59'. "'
                     ORDER BY 1 DESC
                     LIMIT 0, 1000;";
             $query = $this->db->query($sql);
